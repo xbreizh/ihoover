@@ -7,25 +7,45 @@ class HooverTest {
 
 
     @Test
-    void shouldValidateBoard() {
+    void shouldValidateRoomSize() {
         assertAll(
-                () -> assertTrue(Hoover.validateRoomSize("3X4")),
-                () -> assertTrue(Hoover.validateRoomSize("2 x 30")),
-                () -> assertTrue(Hoover.validateRoomSize("111111111X333333333"))
+                () -> assertTrue(Hoover.isRoomSizeValid("3X4")),
+                () -> assertTrue(Hoover.isRoomSizeValid(" 2          x 3 0 ")),
+                () -> assertTrue(Hoover.isRoomSizeValid("111111111X333333333"))
         );
     }
 
     @Test
-    void shouldNotValidateIfNotInteger() {
+    void shouldNotValidateRoomSize() {
         assertAll(
-                () -> assertFalse(Hoover.validateRoomSize("asaxa")),
-                () -> assertFalse(Hoover.validateRoomSize("@3X2")),
-                () -> assertFalse(Hoover.validateRoomSize("1.2x2")),
-                () -> assertFalse(Hoover.validateRoomSize("2x9999999999")),
-                () -> assertFalse(Hoover.validateRoomSize("0x9999999999")),
-                () -> assertFalse(Hoover.validateRoomSize("0x0")),
-                () -> assertFalse(Hoover.validateRoomSize("2x-1"))
+                () -> assertFalse(Hoover.isRoomSizeValid("asaxa")),
+                () -> assertFalse(Hoover.isRoomSizeValid("@3X2")),
+                () -> assertFalse(Hoover.isRoomSizeValid("1.2x2")),
+                () -> assertFalse(Hoover.isRoomSizeValid("2x9999999999")),
+                () -> assertFalse(Hoover.isRoomSizeValid("0x9999999999")),
+                () -> assertFalse(Hoover.isRoomSizeValid("0x0")),
+                () -> assertFalse(Hoover.isRoomSizeValid("2x-1"))
         );
     }
 
+    @Test
+    void shouldNotValidateInitialPosition() {
+        assertAll(
+            () -> assertFalse(Hoover.isInitialPositionValid("1w,2,N", new int[]{7,7})),
+            () -> assertFalse(Hoover.isInitialPositionValid("1,2,Y", new int[]{7,7})),
+            () -> assertFalse(Hoover.isInitialPositionValid("1,2,N,N", new int[]{7,7})),
+            () -> assertFalse(Hoover.isInitialPositionValid("1:2:N:N", new int[]{7,7})),
+            () -> assertFalse(Hoover.isInitialPositionValid("1,2777777777777,Y", new int[]{7,7})),
+            () -> assertFalse(Hoover.isInitialPositionValid("1,22,N", new int[]{7,7}))
+        );
+    }
+
+    @Test
+    void shouldValidateInitialPosition() {
+        assertAll(
+                () -> assertTrue(Hoover.isInitialPositionValid("4,2,N", new int[]{7,7})),
+                () -> assertTrue(Hoover.isInitialPositionValid("4      ,2,N           ", new int[]{7,7})),
+                () -> assertTrue(Hoover.isInitialPositionValid("1,22,N", new int[]{7,77}))
+        );
+    }
 }
