@@ -44,8 +44,25 @@ class HooverTest {
     void shouldValidateInitialPosition() {
         assertAll(
                 () -> assertTrue(Hoover.isInitialPositionValid("4,2,N", new int[]{7,7})),
+                () -> assertTrue(Hoover.isInitialPositionValid("0,0,N", new int[]{1,1})),
                 () -> assertTrue(Hoover.isInitialPositionValid("4      ,2,N           ", new int[]{7,7})),
                 () -> assertTrue(Hoover.isInitialPositionValid("1,22,N", new int[]{7,77}))
+        );
+    }
+
+    @Test
+    void checkOrientation(){
+
+    }
+
+    @Test
+    void moveForward() {
+        final Position initialPosition = new Position(2,2, Orientation.N);
+        final Position finalPosition = Hoover.moveForward(initialPosition);
+        assertAll(
+                () -> assertEquals(finalPosition.x, initialPosition.x),
+                () -> assertEquals(finalPosition.y, initialPosition.y+1),
+                () -> assertEquals(finalPosition.orientation, initialPosition.orientation)
         );
     }
 }

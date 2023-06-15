@@ -1,3 +1,5 @@
+import java.lang.management.OperatingSystemMXBean;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -43,13 +45,23 @@ public class Hoover {
     }
 
     private void outputNewPosition(final Scanner scanner, final int[] roomSize, final Position initialPosition) {
+        // TODO Validate instruction
+        // TODO Validate position against board size
+        Position newPosition = initialPosition;
+        final List<Character> instructionList = new ArrayList<>();
+        String instruction = scanner.nextLine();
+        for (char c : instruction.toUpperCase().toCharArray()) {
+            instructionList.add(c);
+        }
 
-        final Position newPosition = new Position(1, 34, "N");
-        System.out.println("###### TODO #### \nPosition finale: " +
+        for (char c : instructionList) {
+            newPosition = updatePosition(newPosition, Instruction.valueOf(String.valueOf(c)));
+        }
+        System.out.println("############################ \nPosition finale: \n" +
                 "x= " + newPosition.x +
-                "y= " + newPosition.x +
-                "orientation= " + newPosition.orientation
-                );
+                " y= " + newPosition.y +
+                " orientation= " + newPosition.orientation
+        );
     }
 
     static int[] setRoomSize(final Scanner scn) {
@@ -74,38 +86,39 @@ public class Hoover {
 
     static Position setInitialPosition(final Scanner scanner, final int[] roomSize) {
         while (true) {
-            System.out.println(INITIAL_POSITION_INSTRUCTION + " (Dimension de la pièce: " + roomSize[0] + " X " + roomSize[1] + ")");
-            String input = scanner.nextLine();
+            try {
+                System.out.println(INITIAL_POSITION_INSTRUCTION + " (Dimension de la pièce: " + roomSize[0] + " X " + roomSize[1] + ")");
+                String input = scanner.nextLine().replace(" ", "").toUpperCase();
 
-            if (!isInitialPositionValid(input, roomSize)) {
-                System.out.println("\n###\nValeurs invalides: " + input+ "\n###\n\n");
-                continue;
-            }
-            final String[] values = input.split(",");
-            final int x = Integer.parseInt(values[0]);
-            final int y = Integer.parseInt(values[1]);
-            final String o = values[2];
-            System.out.println("Your initial position is: " +
-                    "x=" + x + " y= " + y + " orientation=" + o);
-            return new Position(x, y, o);
+                if (!isInitialPositionValid(input, roomSize)) {
+                    System.out.println("\n###\nValeurs invalides: " + input + "\n###\n\n");
+                    continue;
+                }
+                final String[] values = input.split(",");
+                final int x = Integer.parseInt(values[0]);
+                final int y = Integer.parseInt(values[1]);
+                final Orientation o = Orientation.valueOf(values[2]);
+                System.out.println("Your initial position is: " +
+                        "x=" + x + " y= " + y + " orientation= " + o);
+                return new Position(x, y, o);
+            } catch (final Throwable ignore){}
         }
     }
 
-    static boolean isInitialPositionValid(final String position, final int[] roomSize){
-        try{
-            final String[] values = position.replace(" ", "").split(",");
+    static boolean isInitialPositionValid(final String position, final int[] roomSize) {
+        try {
+            final String[] values = position.toUpperCase().replace(" ", "").split(",");
             if (values.length != 3) {
                 return false;
             }
             final int x = Integer.parseInt(values[0]);
             final int y = Integer.parseInt(values[1]);
-            final String o = values[2];
-            return  x >= 1 &&
+            final Orientation o = Orientation.valueOf(values[2]);
+            return  x >= 0 &&
                     x <= roomSize[0] &&
-                    y >= 1 &&
-                    y <= roomSize[1] &&
-                    VALID_ORIENTATION.contains(o);
-        } catch (final Exception e) {
+                    y >= 0 &&
+                    y <= roomSize[1] ;
+        } catch (final Throwable e) {
             return false;
         }
     }
@@ -120,5 +133,44 @@ public class Hoover {
         } catch (final Exception e) {
             return false;
         }
+    }
+
+    static Position updatePosition(final Position currentPosition, final Instruction value) {
+       // final String currentOrientation = currentPosition.orientation.getName();
+
+        switch (value) {
+
+            case G:
+                return new Position(currentPosition.x, currentPosition.y, Orientation.valueOf(currentPosition.orientation.getLeft()));
+            case D:
+                return new Position(currentPosition.x, currentPosition.y, Orientation.valueOf(currentPosition.orientation.getRight()));
+            default:
+        }
+        return moveForward(currentPosition);
+    }
+
+    static Position moveForward(final Position currentPosition) {
+        System.out.println("Initial position x " + currentPosition.x + " / y " + currentPosition.y);
+        final int x;
+        final int y;
+        switch (currentPosition.orientation){
+            case E:
+                x = currentPosition.x + 1;
+                y = currentPosition.y;
+                break;
+            case W:
+                x = currentPosition.x - 1;
+                y = currentPosition.y;
+                break;
+            case N:
+                x = currentPosition.x;
+                y = currentPosition.y + 1;
+                break;
+            default:
+                x = currentPosition.x;
+                y = currentPosition.y - 1 ;
+        }
+        System.out.println("Position updated: x " + x + " / y " + y);
+        return new Position(x, y, currentPosition.orientation);
     }
 }

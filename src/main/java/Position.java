@@ -2,9 +2,9 @@ public class Position {
 
     int x;
     int y;
-    String orientation;
+    Orientation orientation;
 
-    public Position(int x, int y, String orientation) {
+    public Position(int x, int y, Orientation orientation) {
         this.x = x;
         this.y = y;
         this.orientation = orientation;
@@ -26,11 +26,11 @@ public class Position {
         this.y = y;
     }
 
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(String orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
 
@@ -39,7 +39,7 @@ public class Position {
         return "Position{" +
                 "x=" + x +
                 ", y=" + y +
-                ", orientation='" + orientation + '\'' +
+                ", orientation='" + orientation.getName() + '\'' +
                 '}';
     }
 }
