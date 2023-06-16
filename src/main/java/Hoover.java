@@ -13,20 +13,24 @@ import static model.Messages.*;
 public final class Hoover {
 
     private static final Logger LOGGER = Logger.getLogger(Hoover.class);
+    private final Scanner scanner;
+
+    public Hoover() {
+        this.scanner = new Scanner(System.in);
+    }
 
     void play() {
         try {
-            final Scanner scanner = new Scanner(System.in);
             LOGGER.info(Messages.GENERAL_RULES);
-            final Room room = setRoomSize(scanner);
-            final Position initialPosition = setInitialPosition(scanner, room);
-            outputNewPosition(scanner, room, initialPosition);
+            final Room room = setRoomSize();
+            final Position initialPosition = setInitialPosition(room);
+            outputNewPosition(room, initialPosition);
         } catch (final Exception e) {
             LOGGER.warn(e);
         }
     }
 
-    private void outputNewPosition(final Scanner scanner, final Room room, final Position initialPosition) {
+    private void outputNewPosition(final Room room, final Position initialPosition) {
         Position newPosition = null;
 
         while (true) {
@@ -35,8 +39,8 @@ public final class Hoover {
             }
             LOGGER.info(MOVE_INSTRUCTION);
 
-            String instruction = scanner.nextLine().replace(" ", "").toUpperCase();
-            LOGGER.debug("\nInstructions received " + instruction + "\n\n");
+            String instruction = getMessage();
+            LOGGER.debug("\nInstructions received " + instruction + "\n");
 
             if (instruction.equalsIgnoreCase("X")) {
                 LOGGER.info(FINISH);
@@ -53,7 +57,11 @@ public final class Hoover {
         LOGGER.info("La position final est: " + newPosition);
     }
 
-    static Position updateForSeveralInstructions(final Room room, Position initialPosition, final String instruction) {
+    private String getMessage() {
+        return this.scanner.nextLine().replace(" ", "").toUpperCase();
+    }
+
+    Position updateForSeveralInstructions(final Room room, Position initialPosition, final String instruction) {
         LOGGER.debug("Instructions received: " + instruction);
         Position newPosition = initialPosition;
         for (char c : instruction.toUpperCase().toCharArray()) {
@@ -85,7 +93,7 @@ public final class Hoover {
     }
 
 
-    static boolean isNewPositionValid(final Position newPosition, final Room room) {
+    boolean isNewPositionValid(final Position newPosition, final Room room) {
         return
                 newPosition.getX() > 0 &&
                         newPosition.getY() > 0 &&
@@ -93,7 +101,7 @@ public final class Hoover {
                         newPosition.getY() <= room.getY();
     }
 
-    static boolean isValidInstructions(final String instruction) {
+    boolean isValidInstructions(final String instruction) {
         final String toCheck = instruction.replace(" ", "").toUpperCase();
         if (!toCheck.matches("[AGD]+")) {
             LOGGER.warn("Invalid instructions: " + toCheck);
@@ -102,10 +110,10 @@ public final class Hoover {
         return true;
     }
 
-    static Room setRoomSize(final Scanner scn) {
+    Room setRoomSize() {
         while (true) {
             LOGGER.info(ROOM_SIZE_INSTRUCTION);
-            String input = scn.nextLine();
+            String input = this.getMessage();
             if (input.equalsIgnoreCase("H")) {
                 LOGGER.info(Messages.GENERAL_RULES);
                 continue;
@@ -122,10 +130,10 @@ public final class Hoover {
         }
     }
 
-    static Position setInitialPosition(final Scanner scanner, final Room room) {
+    Position setInitialPosition(final Room room) {
         while (true) {
             LOGGER.info(INITIAL_POSITION_INSTRUCTION + " (Dimension de la pièce: " + room.getX() + " X " + room.getY() + ")");
-            String input = scanner.nextLine().replace(" ", "").toUpperCase();
+            String input = getMessage();
 
             if (!isInitialPositionValid(input, room)) {
                 LOGGER.warn("\n###\nValeurs invalides: " + input + "\n###\n\n");
@@ -142,7 +150,7 @@ public final class Hoover {
         }
     }
 
-    static boolean isInitialPositionValid(final String position, final Room room) {
+    boolean isInitialPositionValid(final String position, final Room room) {
         try {
             final String[] values = position.toUpperCase().replace(" ", "").split(",");
             if (values.length != 3) {
@@ -162,7 +170,7 @@ public final class Hoover {
         }
     }
 
-    static boolean isRoomSizeValid(final String boardSize) {
+    boolean isRoomSizeValid(final String boardSize) {
         try {
             final String roomSizeWithNoSpace = boardSize.replace(" ", "").toUpperCase();
             final String[] size = roomSizeWithNoSpace.split("X");
@@ -174,7 +182,7 @@ public final class Hoover {
         }
     }
 
-    static Position updatePosition(final Position currentPosition, final Instruction value) {
+    Position updatePosition(final Position currentPosition, final Instruction value) {
         switch (value) {
 
             case G:
@@ -186,7 +194,7 @@ public final class Hoover {
         }
     }
 
-    static Position moveForward(final Position currentPosition) {
+    Position moveForward(final Position currentPosition) {
         final int x;
         final int y;
         switch (currentPosition.getOrientation()) {

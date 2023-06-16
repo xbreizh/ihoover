@@ -9,26 +9,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HooverTest {
 
-
+    private final Hoover hoover = new Hoover();
     @Test
     void shouldValidateRoomSize() {
         assertAll(
-            () -> assertTrue(Hoover.isRoomSizeValid("3X4")),
-            () -> assertTrue(Hoover.isRoomSizeValid(" 2          x 3 0 ")),
-            () -> assertTrue(Hoover.isRoomSizeValid("111111111X333333333"))
+            () -> assertTrue(hoover.isRoomSizeValid("3X4")),
+            () -> assertTrue(hoover.isRoomSizeValid(" 2          x 3 0 ")),
+            () -> assertTrue(hoover.isRoomSizeValid("111111111X333333333"))
         );
     }
 
     @Test
     void shouldNotValidateRoomSize() {
         assertAll(
-            () -> assertFalse(Hoover.isRoomSizeValid("asaxa")),
-            () -> assertFalse(Hoover.isRoomSizeValid("@3X2")),
-            () -> assertFalse(Hoover.isRoomSizeValid("1.2x2")),
-            () -> assertFalse(Hoover.isRoomSizeValid("2x9999999999")),
-            () -> assertFalse(Hoover.isRoomSizeValid("0x9999999999")),
-            () -> assertFalse(Hoover.isRoomSizeValid("0x0")),
-            () -> assertFalse(Hoover.isRoomSizeValid("2x-1"))
+            () -> assertFalse(hoover.isRoomSizeValid("asaxa")),
+            () -> assertFalse(hoover.isRoomSizeValid("@3X2")),
+            () -> assertFalse(hoover.isRoomSizeValid("1.2x2")),
+            () -> assertFalse(hoover.isRoomSizeValid("2x9999999999")),
+            () -> assertFalse(hoover.isRoomSizeValid("0x9999999999")),
+            () -> assertFalse(hoover.isRoomSizeValid("0x0")),
+            () -> assertFalse(hoover.isRoomSizeValid("2x-1"))
         );
     }
 
@@ -36,13 +36,13 @@ class HooverTest {
     void shouldNotValidateInitialPosition() {
         final Room room = new Room(7,7);
         assertAll(
-            () -> assertFalse(Hoover.isInitialPositionValid("1w,2,N", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("1,2,Y", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("1,2,N,N", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("1:2:N:N", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("1,2777777777777,Y", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("-5,s", room)),
-            () -> assertFalse(Hoover.isInitialPositionValid("1,22,N", room))
+            () -> assertFalse(hoover.isInitialPositionValid("1w,2,N", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("1,2,Y", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("1,2,N,N", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("1:2:N:N", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("1,2777777777777,Y", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("-5,s", room)),
+            () -> assertFalse(hoover.isInitialPositionValid("1,22,N", room))
         );
     }
 
@@ -50,10 +50,10 @@ class HooverTest {
     void shouldValidateInitialPosition() {
         final Room room = new Room(7,7);
         assertAll(
-            () -> assertTrue(Hoover.isInitialPositionValid("4,2,N", room)),
-            () -> assertTrue(Hoover.isInitialPositionValid("1,1,N", room)),
-            () -> assertTrue(Hoover.isInitialPositionValid("4      ,2,N           ", room)),
-            () -> assertTrue(Hoover.isInitialPositionValid("1,2,s", room))
+            () -> assertTrue(hoover.isInitialPositionValid("4,2,N", room)),
+            () -> assertTrue(hoover.isInitialPositionValid("1,1,N", room)),
+            () -> assertTrue(hoover.isInitialPositionValid("4      ,2,N           ", room)),
+            () -> assertTrue(hoover.isInitialPositionValid("1,2,s", room))
         );
     }
 
@@ -65,7 +65,7 @@ class HooverTest {
     @Test
     void moveForward() {
         final Position initialPosition = new Position(2,2, Orientation.N);
-        final Position finalPosition = Hoover.moveForward(initialPosition);
+        final Position finalPosition = hoover.moveForward(initialPosition);
         assertAll(
             () -> assertEquals(finalPosition.getX(), initialPosition.getX()),
             () -> assertEquals(finalPosition.getY(), initialPosition.getY()+1),
@@ -76,16 +76,16 @@ class HooverTest {
     @Test
     void isValidInstructions() {
         assertAll(
-            ()-> assertTrue(Hoover.isValidInstructions("agdGAddg G")),
-            ()-> assertTrue(Hoover.isValidInstructions("AGG g dAAA"))
+            ()-> assertTrue(hoover.isValidInstructions("agdGAddg G")),
+            ()-> assertTrue(hoover.isValidInstructions("AGG g dAAA"))
         );
     }
 
     @Test
     void isInValidInstructions() {
         assertAll(
-            ()-> assertFalse(Hoover.isValidInstructions("agdGA-ddg G")),
-            ()-> assertFalse(Hoover.isValidInstructions("AGG g cdAAA"))
+            ()-> assertFalse(hoover.isValidInstructions("agdGA-ddg G")),
+            ()-> assertFalse(hoover.isValidInstructions("AGG g cdAAA"))
         );
     }
 
@@ -93,9 +93,9 @@ class HooverTest {
     void isNewPositionValid() {
         final Room room = new Room(7,7);
         assertAll(
-            ()-> assertTrue(Hoover.isNewPositionValid(new Position(7,1,Orientation.E), room)),
-            ()-> assertTrue(Hoover.isNewPositionValid(new Position(6,1,Orientation.E), room)),
-            ()-> assertTrue(Hoover.isNewPositionValid(new Position(7,1,Orientation.E), room))
+            ()-> assertTrue(hoover.isNewPositionValid(new Position(7,1,Orientation.E), room)),
+            ()-> assertTrue(hoover.isNewPositionValid(new Position(6,1,Orientation.E), room)),
+            ()-> assertTrue(hoover.isNewPositionValid(new Position(7,1,Orientation.E), room))
         );
     }
 
@@ -103,9 +103,9 @@ class HooverTest {
     void isNewPositionInValid() {
         final Room room = new Room(7,7);
         assertAll(
-            ()-> assertFalse(Hoover.isNewPositionValid(new Position(0,-1,Orientation.E), room)),
-            ()-> assertFalse(Hoover.isNewPositionValid(new Position(0,1, Orientation.E), room)),
-            ()-> assertFalse(Hoover.isNewPositionValid(new Position(8,1,Orientation.E), room))
+            ()-> assertFalse(hoover.isNewPositionValid(new Position(0,-1,Orientation.E), room)),
+            ()-> assertFalse(hoover.isNewPositionValid(new Position(0,1, Orientation.E), room)),
+            ()-> assertFalse(hoover.isNewPositionValid(new Position(8,1,Orientation.E), room))
         );
     }
 
@@ -113,20 +113,20 @@ class HooverTest {
     void updatePositionForSingleInstruction() {
         final Position position = new Position(0,0,Orientation.N);
         assertAll(
-            ()-> assertEquals(Orientation.W, Hoover.updatePosition(position, Instruction.G).getOrientation()),
-            ()-> assertEquals(Orientation.E, Hoover.updatePosition(position, Instruction.D).getOrientation()),
-            ()-> assertEquals(Orientation.N, Hoover.updatePosition(position, Instruction.A).getOrientation())
+            ()-> assertEquals(Orientation.W, hoover.updatePosition(position, Instruction.G).getOrientation()),
+            ()-> assertEquals(Orientation.E, hoover.updatePosition(position, Instruction.D).getOrientation()),
+            ()-> assertEquals(Orientation.N, hoover.updatePosition(position, Instruction.A).getOrientation())
         );
     }
 
     @Test
     void updatePositionForSeveralInstructions() {
         final Position initialPosition = new Position(0,0,Orientation.N);
-        Position newPosition = Hoover.updatePosition(initialPosition, Instruction.D);
-        newPosition = Hoover.updatePosition(newPosition, Instruction.G);
-        newPosition = Hoover.updatePosition(newPosition, Instruction.A);
-        newPosition = Hoover.updatePosition(newPosition, Instruction.A);
-        newPosition = Hoover.updatePosition(newPosition, Instruction.D);
+        Position newPosition = hoover.updatePosition(initialPosition, Instruction.D);
+        newPosition = hoover.updatePosition(newPosition, Instruction.G);
+        newPosition = hoover.updatePosition(newPosition, Instruction.A);
+        newPosition = hoover.updatePosition(newPosition, Instruction.A);
+        newPosition = hoover.updatePosition(newPosition, Instruction.D);
         assertEquals(0, newPosition.getX());
         assertEquals(2, newPosition.getY());
         assertEquals(Orientation.E, newPosition.getOrientation());
@@ -137,7 +137,7 @@ class HooverTest {
         final Position initialPosition = new Position(5,5,Orientation.N);
         final Position expectedPosition = new Position(5,6,Orientation.N);
         final String instruction = "DADADADAA";
-        final Position newPosition = Hoover.updateForSeveralInstructions(new Room(10,10), initialPosition, instruction);
+        final Position newPosition = hoover.updateForSeveralInstructions(new Room(10,10), initialPosition, instruction);
         assertAll(
                 () -> assertEquals(expectedPosition.getX(), newPosition.getX()),
                 () -> assertEquals(expectedPosition.getY(), newPosition.getY()),
@@ -150,7 +150,7 @@ class HooverTest {
         final Position initialPosition = new Position(0,0,Orientation.N);
         final Position expectedPosition = new Position(0,0,Orientation.N);
         final String instruction = "AAAggggaaya";
-        final Position newPosition = Hoover.updateForSeveralInstructions(new Room(7,7), initialPosition, instruction);
+        final Position newPosition = hoover.updateForSeveralInstructions(new Room(7,7), initialPosition, instruction);
         assertAll(
                 () -> assertEquals(expectedPosition.getX(), newPosition.getX()),
                 () -> assertEquals(expectedPosition.getY(), newPosition.getY()),
@@ -163,7 +163,7 @@ class HooverTest {
         final Position initialPosition = new Position(0,0,Orientation.N);
         final Position expectedPosition = new Position(0,0,Orientation.N);
         final String instruction = "AAA";
-        final Position newPosition = Hoover.updateForSeveralInstructions(new Room(2,2), initialPosition, instruction);
+        final Position newPosition = hoover.updateForSeveralInstructions(new Room(2,2), initialPosition, instruction);
         assertAll(
                 () -> assertEquals(expectedPosition.getX(), newPosition.getX()),
                 () -> assertEquals(expectedPosition.getY(), newPosition.getY()),
