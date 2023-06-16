@@ -38,7 +38,7 @@ L’utilisation de librairie ou framework tierce est autorisée.
 ### Test 1
 
 Dimension de la grille : x=10 y=10
-Position initiale de l’aspirateur : x=5 y=5 orientation=N
+model.Position initiale de l’aspirateur : x=5 y=5 orientation=N
 Instructions : DADADADAA
 
 On attend comme position finale : x=5 y=6 orientation=N

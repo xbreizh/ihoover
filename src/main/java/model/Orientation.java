@@ -1,7 +1,9 @@
+package model;
+
 public enum Orientation {
     N("NORTH", "W", "E"),
     E("EAST", "N", "S"),
-    W("WEST","S", "S"),
+    W("WEST","S", "N"),
     S("SOUTH", "E", "W");
 
     private final String name;

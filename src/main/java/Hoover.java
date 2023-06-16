@@ -1,52 +1,28 @@
-import java.util.Scanner;
 
+import model.Messages;
+import model.Position;
+import model.Instruction;
+import model.Orientation;
+import model.Room;
 import org.apache.log4j.Logger;
 
+import java.util.Scanner;
+
+import static model.Messages.*;
+
 public final class Hoover {
-
-    static final String GENERAL_RULES =
-            "Vous pilotez un aspirateur automatique. \n" +
-                    "Vous allez devoir péciser:\n" +
-                    "- la dimension de la pièce\n" +
-                    "- la position de départ de l'aspirateur\n" +
-                    "- les instructions de déplacement\n" +
-                    "Vous pouvez réafficher ce message à tout moment en tapant \"H\"";
-
-    static final String ROOM_SIZE_INSTRUCTION =
-            "Veuillez entrer les dimensions de la pièce au format longueur X largeur\n" +
-                    "La valeur doit être comprise entre 1 et 999999999\n" +
-                    "Exemple: 23X44\n\n" +
-                    "Veuillez entrer les dimensions de la pièce: \n";
-
-    static final String INITIAL_POSITION_INSTRUCTION =
-            "Veuillez entrer les coordonnées de la position initiale de l'aspirateur.\n" +
-                    "Celle-ci se compose de:" +
-                    "- Position en longueur (entier compris entre 1 et 999999999)\n" +
-                    "- Position en largeur (entier compris entre 1 et 999999999)\n" +
-                    "- Orientation (N (Nord), E (Est), W (Ouest), S (Sud))\n" +
-                    "Chaque valeur sera séparée par une virgule\n" +
-                    "Note: les coordonnées devront bien être valides par rapport aux dimensions de la pièce fournis: \n" +
-                    "Exemple: 3,5,N\n" +
-                    "Veuillez entrer les coordonnées de la position initiale: ";
-
-    static final String MOVE_INSTRUCTION = "Quelles instructions souhaitez vous donner?\n" +
-            "Voici la liste des possibilités: A (Avancer), G (Gauche), D (Droite)\n" +
-            "Tape X pour arrêter";
-    static final String FINISH = "######################\n" +
-            "####### THE END ######\n" +
-            "######################\n";
 
     private static final Logger LOGGER = Logger.getLogger(Hoover.class);
 
     void play() {
         try {
-            LOGGER.info(GENERAL_RULES);
             final Scanner scanner = new Scanner(System.in);
+            LOGGER.info(Messages.GENERAL_RULES);
             final Room room = setRoomSize(scanner);
             final Position initialPosition = setInitialPosition(scanner, room);
             outputNewPosition(scanner, room, initialPosition);
         } catch (final Exception e) {
-            System.out.println(e);
+            LOGGER.warn(e);
         }
     }
 
@@ -74,10 +50,11 @@ public final class Hoover {
 
             newPosition = updateForSeveralInstructions(room, newPosition, instruction);
         }
-
+        LOGGER.info("La position final est: " + newPosition);
     }
 
     static Position updateForSeveralInstructions(final Room room, Position initialPosition, final String instruction) {
+        LOGGER.debug("Instructions received: " + instruction);
         Position newPosition = initialPosition;
         for (char c : instruction.toUpperCase().toCharArray()) {
             try {
@@ -89,30 +66,31 @@ public final class Hoover {
             }
             if (!isNewPositionValid(newPosition, room)) {
                 LOGGER.warn(
-                    "Invalid position " + newPosition +
-                    "Restoring previous position: " + initialPosition);
+                        "Invalid position " + newPosition +
+                                "Restoring previous position: " + initialPosition);
                 newPosition = initialPosition;
                 break;
             } else {
-                LOGGER.info(
-                    "The instructions are valid: " + newPosition +
-                    "\n############################ \nNew Position: \n" +
-                    "x= " + newPosition.getX() +
-                    " y= " + newPosition.getY() +
-                    " orientation= " + newPosition.getOrientation() + "\n"
+                LOGGER.debug(
+                        "The instructions are valid: " + newPosition +
+                                "\n############################ \nNew model.Position: \n" +
+                                "x= " + newPosition.getX() +
+                                " y= " + newPosition.getY() +
+                                " orientation= " + newPosition.getOrientation() + "\n"
                 );
             }
         }
+        LOGGER.info("\nLa nouvelle position est: " + newPosition + "\n");
         return newPosition;
     }
 
 
     static boolean isNewPositionValid(final Position newPosition, final Room room) {
         return
-                newPosition.getX() >= 0 &&
-                        newPosition.getY() >= 0 &&
-                        newPosition.getX() < room.getX() &&
-                        newPosition.getY() < room.getY();
+                newPosition.getX() > 0 &&
+                        newPosition.getY() > 0 &&
+                        newPosition.getX() <= room.getX() &&
+                        newPosition.getY() <= room.getY();
     }
 
     static boolean isValidInstructions(final String instruction) {
@@ -126,16 +104,16 @@ public final class Hoover {
 
     static Room setRoomSize(final Scanner scn) {
         while (true) {
-            System.out.println(ROOM_SIZE_INSTRUCTION);
+            LOGGER.info(ROOM_SIZE_INSTRUCTION);
             String input = scn.nextLine();
             if (input.equalsIgnoreCase("H")) {
-                System.out.println(GENERAL_RULES);
+                LOGGER.info(Messages.GENERAL_RULES);
                 continue;
             }
             input = input.replaceAll(" ", "").toUpperCase();
             if (!isRoomSizeValid(input)) {
                 LOGGER.warn(
-                    "\n###\nBoard size is invalid: " + input + "\n###\n\n");
+                        "\n###\nBoard size is invalid: " + input + "\n###\n\n");
                 continue;
             }
             final int x = Integer.parseInt(input.split("X")[0]);
@@ -146,20 +124,20 @@ public final class Hoover {
 
     static Position setInitialPosition(final Scanner scanner, final Room room) {
         while (true) {
-                LOGGER.info(INITIAL_POSITION_INSTRUCTION + " (Dimension de la pièce: " + room.getX() + " X " + room.getY() + ")");
-                String input = scanner.nextLine().replace(" ", "").toUpperCase();
+            LOGGER.info(INITIAL_POSITION_INSTRUCTION + " (Dimension de la pièce: " + room.getX() + " X " + room.getY() + ")");
+            String input = scanner.nextLine().replace(" ", "").toUpperCase();
 
-                if (!isInitialPositionValid(input, room)) {
-                    LOGGER.warn("\n###\nValeurs invalides: " + input + "\n###\n\n");
-                    continue;
-                }
-                final String[] values = input.split(",");
-                final int x = Integer.parseInt(values[0]);
-                final int y = Integer.parseInt(values[1]);
-                final Orientation o = Orientation.valueOf(values[2]);
-                LOGGER.info("Your initial position is: " +
-                        "x=" + x + " y= " + y + " orientation= " + o);
-                return new Position(x, y, o);
+            if (!isInitialPositionValid(input, room)) {
+                LOGGER.warn("\n###\nValeurs invalides: " + input + "\n###\n\n");
+                continue;
+            }
+            final String[] values = input.split(",");
+            final int x = Integer.parseInt(values[0]);
+            final int y = Integer.parseInt(values[1]);
+            final Orientation o = Orientation.valueOf(values[2]);
+            LOGGER.info("Your initial position is: " +
+                    "x=" + x + " y= " + y + " orientation= " + o);
+            return new Position(x, y, o);
 
         }
     }
@@ -174,10 +152,10 @@ public final class Hoover {
             final int y = Integer.parseInt(values[1]);
             Orientation.valueOf(values[2]);
             return
-                x >= 0 &&
-                x <= room.getY() &&
-                y >= 0 &&
-                y <= room.getY();
+                    x > 0 &&
+                            x < room.getY() &&
+                            y > 0 &&
+                            y < room.getY();
         } catch (final Throwable e) {
             LOGGER.warn("Invalid position " + position);
             return false;

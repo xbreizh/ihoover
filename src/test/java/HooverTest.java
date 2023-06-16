@@ -1,3 +1,7 @@
+import model.Instruction;
+import model.Orientation;
+import model.Position;
+import model.Room;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,7 +51,7 @@ class HooverTest {
         final Room room = new Room(7,7);
         assertAll(
             () -> assertTrue(Hoover.isInitialPositionValid("4,2,N", room)),
-            () -> assertTrue(Hoover.isInitialPositionValid("0,0,N", room)),
+            () -> assertTrue(Hoover.isInitialPositionValid("1,1,N", room)),
             () -> assertTrue(Hoover.isInitialPositionValid("4      ,2,N           ", room)),
             () -> assertTrue(Hoover.isInitialPositionValid("1,2,s", room))
         );
@@ -89,8 +93,9 @@ class HooverTest {
     void isNewPositionValid() {
         final Room room = new Room(7,7);
         assertAll(
-            ()-> assertTrue(Hoover.isNewPositionValid(new Position(0,1,Orientation.E), room)),
-            ()-> assertTrue(Hoover.isNewPositionValid(new Position(6,1,Orientation.E), room))
+            ()-> assertTrue(Hoover.isNewPositionValid(new Position(7,1,Orientation.E), room)),
+            ()-> assertTrue(Hoover.isNewPositionValid(new Position(6,1,Orientation.E), room)),
+            ()-> assertTrue(Hoover.isNewPositionValid(new Position(7,1,Orientation.E), room))
         );
     }
 
@@ -99,7 +104,8 @@ class HooverTest {
         final Room room = new Room(7,7);
         assertAll(
             ()-> assertFalse(Hoover.isNewPositionValid(new Position(0,-1,Orientation.E), room)),
-            ()-> assertFalse(Hoover.isNewPositionValid(new Position(7,1,Orientation.E), room))
+            ()-> assertFalse(Hoover.isNewPositionValid(new Position(0,1, Orientation.E), room)),
+            ()-> assertFalse(Hoover.isNewPositionValid(new Position(8,1,Orientation.E), room))
         );
     }
 
