@@ -1,8 +1,8 @@
 public class Position {
 
-    int x;
-    int y;
-    Orientation orientation;
+    private int x;
+    private int y;
+    private Orientation orientation;
 
     public Position(int x, int y, Orientation orientation) {
         this.x = x;
@@ -30,16 +30,13 @@ public class Position {
         return orientation;
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
 
     @Override
     public String toString() {
         return "Position{" +
-                "x=" + x +
-                ", y=" + y +
-                ", orientation='" + orientation.getName() + '\'' +
-                '}';
+            "x=" + x +
+            ", y=" + y +
+            ", orientation='" + orientation.getName() + '\'' +
+        '}';
     }
 }
