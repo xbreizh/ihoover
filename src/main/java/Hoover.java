@@ -4,7 +4,8 @@ import model.Position;
 import model.Instruction;
 import model.Orientation;
 import model.Room;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ import static model.Messages.*;
 
 public final class Hoover {
 
-    private static final Logger LOGGER = Logger.getLogger(Hoover.class);
+    private static final Logger LOGGER = LogManager.getLogger(Hoover.class);
     private final Scanner scanner;
 
     public Hoover() {
@@ -126,6 +127,7 @@ public final class Hoover {
             }
             final int x = Integer.parseInt(input.split("X")[0]);
             final int y = Integer.parseInt(input.split("X")[1]);
+            System.out.flush();
             return new Room(x, y);
         }
     }
