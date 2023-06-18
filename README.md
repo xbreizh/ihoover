@@ -38,10 +38,22 @@ L’utilisation de librairie ou framework tierce est autorisée.
 ### Test 1
 
 Dimension de la grille : x=10 y=10
-model.Position initiale de l’aspirateur : x=5 y=5 orientation=N
+com.yanport.ihoover.model.Position initiale de l’aspirateur : x=5 y=5 orientation=N
 Instructions : DADADADAA
 
 On attend comme position finale : x=5 y=6 orientation=N
 
 NB : le programme doit pouvoir évoluer facilement en fonction de nouvelles contraintes qui vous seront communiquées lors
 de l’entretien.
+
+## Comment utiliser
+
+Le project a été conçu avec Maven. Depuis le dossier principal, lancer la commande ```mvn clean install```
+
+Une fois le projet construit, se rendre dans le dossier __target__.   
+Si vous êtes sur Linux, modifier les droits du fichier
+ihoover-1.0-SNAPSHOT.jar avec la commande
+```chmod 755 ihoover-1.0-SNAPSHOT.jar```
+
+Exécuter le jar avec la commande ```java -jar ihoover-1.0-SNAPSHOT.jar```
+
