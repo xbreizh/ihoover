@@ -1,15 +1,16 @@
+package com.yanport.ihoover;
 
-import model.Messages;
-import model.Position;
-import model.Instruction;
-import model.Orientation;
-import model.Room;
+import com.yanport.ihoover.model.Messages;
+import com.yanport.ihoover.model.Position;
+import com.yanport.ihoover.model.Instruction;
+import com.yanport.ihoover.model.Orientation;
+import com.yanport.ihoover.model.Room;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
-import static model.Messages.*;
+import static com.yanport.ihoover.model.Messages.*;
 
 public final class Hoover {
 
@@ -62,7 +63,7 @@ public final class Hoover {
         return this.scanner.nextLine().replace(" ", "").toUpperCase();
     }
 
-    Position updateForSeveralInstructions(final Room room, Position initialPosition, final String instruction) {
+    public Position updateForSeveralInstructions(final Room room, Position initialPosition, final String instruction) {
         LOGGER.debug("Instructions received: " + instruction);
         Position newPosition = initialPosition;
         for (char c : instruction.toUpperCase().toCharArray()) {
@@ -82,7 +83,7 @@ public final class Hoover {
             } else {
                 LOGGER.debug(
                         "The instructions are valid: " + newPosition +
-                                "\n############################ \nNew model.Position: \n" +
+                                "\n############################ \nNew com.yanport.ihoover.model.Position: \n" +
                                 "x= " + newPosition.getX() +
                                 " y= " + newPosition.getY() +
                                 " orientation= " + newPosition.getOrientation() + "\n"
@@ -94,7 +95,7 @@ public final class Hoover {
     }
 
 
-    boolean isNewPositionValid(final Position newPosition, final Room room) {
+    public boolean isNewPositionValid(final Position newPosition, final Room room) {
         return
                 newPosition.getX() > 0 &&
                         newPosition.getY() > 0 &&
@@ -102,7 +103,7 @@ public final class Hoover {
                         newPosition.getY() <= room.getY();
     }
 
-    boolean isValidInstructions(final String instruction) {
+    public boolean isValidInstructions(final String instruction) {
         final String toCheck = instruction.replace(" ", "").toUpperCase();
         if (!toCheck.matches("[AGD]+")) {
             LOGGER.warn("Invalid instructions: " + toCheck);
@@ -152,7 +153,7 @@ public final class Hoover {
         }
     }
 
-    boolean isInitialPositionValid(final String position, final Room room) {
+    public boolean isInitialPositionValid(final String position, final Room room) {
         try {
             final String[] values = position.toUpperCase().replace(" ", "").split(",");
             if (values.length != 3) {
@@ -172,7 +173,7 @@ public final class Hoover {
         }
     }
 
-    boolean isRoomSizeValid(final String boardSize) {
+    public boolean isRoomSizeValid(final String boardSize) {
         try {
             final String roomSizeWithNoSpace = boardSize.replace(" ", "").toUpperCase();
             final String[] size = roomSizeWithNoSpace.split("X");
@@ -184,7 +185,7 @@ public final class Hoover {
         }
     }
 
-    Position updatePosition(final Position currentPosition, final Instruction value) {
+    public Position updatePosition(final Position currentPosition, final Instruction value) {
         switch (value) {
 
             case G:
@@ -196,7 +197,7 @@ public final class Hoover {
         }
     }
 
-    Position moveForward(final Position currentPosition) {
+    public Position moveForward(final Position currentPosition) {
         final int x;
         final int y;
         switch (currentPosition.getOrientation()) {

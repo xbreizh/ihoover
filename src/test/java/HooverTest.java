@@ -1,7 +1,8 @@
-import model.Instruction;
-import model.Orientation;
-import model.Position;
-import model.Room;
+import com.yanport.ihoover.Hoover;
+import com.yanport.ihoover.model.Instruction;
+import com.yanport.ihoover.model.Orientation;
+import com.yanport.ihoover.model.Position;
+import com.yanport.ihoover.model.Room;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,4 @@
-package model;
+package com.yanport.ihoover.model;
 
 public enum Orientation {
     N("NORTH", "W", "E"),

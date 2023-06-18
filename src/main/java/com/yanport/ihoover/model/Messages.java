@@ -1,4 +1,4 @@
-package model;
+package com.yanport.ihoover.model;
 
 public enum Messages {
 
@@ -17,9 +17,9 @@ public enum Messages {
     INITIAL_POSITION_INSTRUCTION (
             "Veuillez entrer les coordonnées de la position initiale de l'aspirateur.\n" +
             "Celle-ci se compose de:" +
-            "- model.Position en longueur (entier compris entre 1 et 999999999)\n" +
-            "- model.Position en largeur (entier compris entre 1 et 999999999)\n" +
-            "- model.Orientation (N (Nord), E (Est), W (Ouest), S (Sud))\n" +
+            "- com.yanport.ihoover.model.Position en longueur (entier compris entre 1 et 999999999)\n" +
+            "- com.yanport.ihoover.model.Position en largeur (entier compris entre 1 et 999999999)\n" +
+            "- com.yanport.ihoover.model.Orientation (N (Nord), E (Est), W (Ouest), S (Sud))\n" +
             "Chaque valeur sera séparée par une virgule\n" +
             "Note: les coordonnées devront bien être valides par rapport aux dimensions de la pièce fournis: \n" +
             "Exemple: 3,5,N\n" +

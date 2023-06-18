@@ -1,4 +1,4 @@
-package model;
+package com.yanport.ihoover.model;
 
 public class Position {
 
@@ -28,7 +28,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return "model.Position{" +
+        return "Position{" +
             "x=" + x +
             ", y=" + y +
             ", orientation='" + orientation.getName() + '\'' +

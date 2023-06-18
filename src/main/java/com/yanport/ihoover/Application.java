@@ -1,4 +1,4 @@
-import java.util.Scanner;
+package com.yanport.ihoover;
 
 public class Application {
 
